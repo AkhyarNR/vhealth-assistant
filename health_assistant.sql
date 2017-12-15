@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.7.0
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 11 Des 2017 pada 15.44
--- Versi Server: 10.1.16-MariaDB
--- PHP Version: 5.6.24
+-- Generation Time: Dec 15, 2017 at 08:49 AM
+-- Server version: 10.1.25-MariaDB
+-- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -23,7 +25,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_dokter`
+-- Table structure for table `vha_antrian`
+--
+
+CREATE TABLE `vha_antrian` (
+  `id_antrian` int(11) NOT NULL,
+  `id_dokter` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `no_antrian` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vha_dokter`
 --
 
 CREATE TABLE `vha_dokter` (
@@ -43,7 +58,7 @@ CREATE TABLE `vha_dokter` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_dosis`
+-- Table structure for table `vha_dosis`
 --
 
 CREATE TABLE `vha_dosis` (
@@ -54,7 +69,7 @@ CREATE TABLE `vha_dosis` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_obat_herbal`
+-- Table structure for table `vha_obat_herbal`
 --
 
 CREATE TABLE `vha_obat_herbal` (
@@ -69,7 +84,7 @@ CREATE TABLE `vha_obat_herbal` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_obat_kimia`
+-- Table structure for table `vha_obat_kimia`
 --
 
 CREATE TABLE `vha_obat_kimia` (
@@ -86,7 +101,26 @@ CREATE TABLE `vha_obat_kimia` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_penyakit`
+-- Table structure for table `vha_pasien`
+--
+
+CREATE TABLE `vha_pasien` (
+  `id_pasien` int(11) NOT NULL,
+  `nik` int(11) NOT NULL,
+  `nama_lengkap` varchar(100) NOT NULL,
+  `tgl_lahir` date NOT NULL,
+  `jenkel` int(1) NOT NULL,
+  `nope` int(11) NOT NULL,
+  `alamat` text NOT NULL,
+  `tinggi` int(3) NOT NULL,
+  `berat` int(3) NOT NULL,
+  `foto` varchar(55) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vha_penyakit`
 --
 
 CREATE TABLE `vha_penyakit` (
@@ -95,14 +129,25 @@ CREATE TABLE `vha_penyakit` (
   `id_jenis_penyakit` int(2) NOT NULL,
   `gejala` int(11) NOT NULL,
   `penyebab` text NOT NULL,
-  `obat_kimia` int(11) NOT NULL,
-  `obat_herbal` int(11) NOT NULL
+  `id_obat_k` int(11) NOT NULL,
+  `id_obat_h` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `vha_user`
+-- Table structure for table `vha_spesialis`
+--
+
+CREATE TABLE `vha_spesialis` (
+  `id_spesialis` int(11) NOT NULL,
+  `spesialis` varchar(55) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vha_user`
 --
 
 CREATE TABLE `vha_user` (
@@ -114,7 +159,7 @@ CREATE TABLE `vha_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `vha_user`
+-- Dumping data for table `vha_user`
 --
 
 INSERT INTO `vha_user` (`id_user`, `level`, `username`, `password`, `email`) VALUES
@@ -124,6 +169,12 @@ INSERT INTO `vha_user` (`id_user`, `level`, `username`, `password`, `email`) VAL
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `vha_antrian`
+--
+ALTER TABLE `vha_antrian`
+  ADD PRIMARY KEY (`id_antrian`);
 
 --
 -- Indexes for table `vha_dokter`
@@ -150,10 +201,23 @@ ALTER TABLE `vha_obat_kimia`
   ADD PRIMARY KEY (`id_obat_k`);
 
 --
+-- Indexes for table `vha_pasien`
+--
+ALTER TABLE `vha_pasien`
+  ADD PRIMARY KEY (`id_pasien`),
+  ADD UNIQUE KEY `UNIQUE` (`nik`);
+
+--
 -- Indexes for table `vha_penyakit`
 --
 ALTER TABLE `vha_penyakit`
   ADD PRIMARY KEY (`id_penyakit`);
+
+--
+-- Indexes for table `vha_spesialis`
+--
+ALTER TABLE `vha_spesialis`
+  ADD PRIMARY KEY (`id_spesialis`);
 
 --
 -- Indexes for table `vha_user`
@@ -166,6 +230,11 @@ ALTER TABLE `vha_user`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `vha_antrian`
+--
+ALTER TABLE `vha_antrian`
+  MODIFY `id_antrian` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `vha_dokter`
 --
@@ -187,15 +256,26 @@ ALTER TABLE `vha_obat_herbal`
 ALTER TABLE `vha_obat_kimia`
   MODIFY `id_obat_k` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `vha_pasien`
+--
+ALTER TABLE `vha_pasien`
+  MODIFY `id_pasien` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `vha_penyakit`
 --
 ALTER TABLE `vha_penyakit`
   MODIFY `id_penyakit` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `vha_spesialis`
+--
+ALTER TABLE `vha_spesialis`
+  MODIFY `id_spesialis` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `vha_user`
 --
 ALTER TABLE `vha_user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
